@@ -1,23 +1,18 @@
 {
-  "id": "/AhorroChallenge/",
-  "short_name": "Ahorro",
   "name": "Ahorro Challenge",
+  "short_name": "Ahorro",
+  "description": "Reto de ahorro de 52 semanas",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#10b981",
   "icons": [
     {
       "src": "https://i.ibb.co/m5p3Srk/image.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "https://i.ibb.co/m5p3Srk/image.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any maskable"
     }
-  ],
-  "start_url": "/AhorroChallenge/",
-  "display": "standalone",
-  "theme_color": "#10b981",
-  "background_color": "#f8fafc"
+  ]
 }
