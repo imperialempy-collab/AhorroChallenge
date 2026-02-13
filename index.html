@@ -5,34 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ahorro Challenge</title>
     
-    <link rel="manifest" href="./manifest.json">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
     
-    <link rel="icon" type="image/png" href="https://i.ibb.co/m5p3Srk/image.png">
-    <link rel="apple-touch-icon" href="https://i.ibb.co/m5p3Srk/image.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Ahorro">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#10b981">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: { primary: '#10b981', secondary: '#0ea5e9', background: '#f8fafc' },
-                    fontFamily: { display: ['Outfit', 'sans-serif'], body: ['Plus Jakarta Sans', 'sans-serif'] },
-                }
-            }
-        }
+        tailwind.config = { theme: { extend: { colors: { primary: '#10b981', secondary: '#0ea5e9', background: '#f8fafc' }, fontFamily: { display: ['Outfit', 'sans-serif'], body: ['Plus Jakarta Sans', 'sans-serif'] } } } }
     </script>
     <style>
         body { background: radial-gradient(circle at top right, #f0fdf4, #f8fafc 50%), radial-gradient(circle at bottom left, #eff6ff, #f8fafc 50%); min-height: 100vh; }
-        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.5); }
+        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.5); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .badge-active { background: #10b981 !important; color: white !important; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2); }
+        .badge-active { background: #10b981 !important; color: white !important; }
     </style>
 </head>
 <body class="font-body text-slate-800">
@@ -71,15 +63,15 @@
                     </div>
                     <div id="participantList" class="space-y-1"></div>
                 </div>
-                <button onclick="confirmReset()" class="w-full py-2 text-xs font-bold text-rose-400 hover:text-rose-600 flex justify-center items-center gap-1">RESETEAR TODO</button>
+                <button onclick="confirmReset()" class="w-full py-2 text-xs font-bold text-rose-400 hover:text-rose-600 transition-colors flex justify-center items-center gap-1">RESETEAR TODO</button>
             </aside>
             <main class="lg:col-span-3">
                 <div class="flex overflow-x-auto pb-3 gap-2 no-scrollbar mb-4">
-                    <button onclick="filterPhase('ALL')" class="px-4 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-bold">Todas</button>
-                    <button onclick="filterPhase('EMPEZAR')" class="px-4 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-bold">Fase 1</button>
-                    <button onclick="filterPhase('SOSTENER')" class="px-4 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-bold">Fase 2</button>
-                    <button onclick="filterPhase('CONSTANCIA')" class="px-4 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-bold">Fase 3</button>
-                    <button onclick="filterPhase('RESULTADOS')" class="px-4 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-bold">Fase 4</button>
+                    <button onclick="filterPhase('ALL')" class="phase-btn flex-none px-4 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-bold">Todas</button>
+                    <button onclick="filterPhase('EMPEZAR')" class="phase-btn flex-none px-4 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-bold">Fase 1</button>
+                    <button onclick="filterPhase('SOSTENER')" class="phase-btn flex-none px-4 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-bold">Fase 2</button>
+                    <button onclick="filterPhase('CONSTANCIA')" class="phase-btn flex-none px-4 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-bold">Fase 3</button>
+                    <button onclick="filterPhase('RESULTADOS')" class="phase-btn flex-none px-4 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-bold">Fase 4</button>
                 </div>
                 <div id="goalsList" class="space-y-2"></div>
             </main>
@@ -89,19 +81,98 @@
     <script>
         let challengeData = []; let participants = []; let activeParticipant = ""; let currentFilter = "ALL"; let statsView = "COLECTIVO";
         const formatPYG = (n) => new Intl.NumberFormat('es-PY').format(n) + ' Gs.';
-        function generateWeeks() { challengeData = []; for (let i = 1; i <= 52; i++) { let phase = i <= 13 ? "EMPEZAR" : i <= 26 ? "SOSTENER" : i <= 39 ? "CONSTANCIA" : "RESULTADOS"; challengeData.push({ week: i, amount: i * 10000, phase: phase, completions: [] }); } }
-        function save() { localStorage.setItem('ahorro_final_v13', JSON.stringify({ challengeData, participants, activeParticipant, statsView })); }
-        function load() { const saved = localStorage.getItem('ahorro_final_v13'); if (saved) { const p = JSON.parse(saved); challengeData = p.challengeData; participants = p.participants; activeParticipant = p.activeParticipant; statsView = p.statsView || "COLECTIVO"; } else { generateWeeks(); } }
-        function renderParticipants() { const list = document.getElementById('participantList'); if (participants.length === 0) { list.innerHTML = `<p class="text-[11px] text-slate-400 italic px-2">Agrega un nombre</p>`; return; } list.innerHTML = participants.map(p => `<div class="flex items-center bg-white/50 rounded-lg p-1 border border-transparent hover:border-slate-200"><button onclick="setActiveParticipant('${p}')" class="flex-grow text-left px-3 py-1.5 text-sm font-semibold rounded-md transition-all ${p === activeParticipant ? 'badge-active' : 'text-slate-500'}">${p}</button><button onclick="deleteParticipant('${p}')" class="px-2 text-slate-300 hover:text-rose-500">X</button></div>`).join(''); }
-        function addParticipant() { const n = document.getElementById('newParticipantInput').value.trim().toUpperCase(); if (n && !participants.includes(n)) { participants.push(n); if (!activeParticipant) activeParticipant = n; document.getElementById('newParticipantInput').value = ''; save(); renderParticipants(); renderGoals(); updateStats(); } }
-        function deleteParticipant(n) { if (confirm(`¿Eliminar a ${n}?`)) { participants = participants.filter(p => p !== n); challengeData.forEach(g => g.completions = g.completions.filter(c => c.participant !== n)); if (activeParticipant === n) activeParticipant = participants[0] || ""; save(); renderParticipants(); renderGoals(); updateStats(); } }
-        function setActiveParticipant(n) { activeParticipant = n; save(); renderParticipants(); renderGoals(); updateStats(); }
-        function setStatsView(v) { statsView = v; updateStats(); document.getElementById('btnViewCol').className = v === 'COLECTIVO' ? 'px-3 py-1 text-xs font-bold rounded-full border border-primary text-primary' : 'px-3 py-1 text-xs font-bold rounded-full border border-slate-200 text-slate-400'; document.getElementById('btnViewInd').className = v === 'INDIVIDUAL' ? 'px-3 py-1 text-xs font-bold rounded-full border border-primary text-primary' : 'px-3 py-1 text-xs font-bold rounded-full border border-slate-200 text-slate-400'; }
-        function toggle(idx) { if (!activeParticipant) return alert("Agrega un nombre"); const g = challengeData[idx]; const cIdx = g.completions.findIndex(c => c.participant === activeParticipant); if (cIdx > -1) g.completions.splice(cIdx, 1); else g.completions.push({ participant: activeParticipant, date: new Date().toLocaleDateString('es-PY') }); save(); renderGoals(); updateStats(); }
-        function updateStats() { let t = 0, m = 0; if (statsView === 'COLECTIVO') { t = challengeData.reduce((s, g) => s + (g.completions.length * g.amount), 0); m = challengeData.filter(g => g.completions.length > 0).length; } else { t = challengeData.reduce((s, g) => s + (g.completions.some(c => c.participant === activeParticipant) ? g.amount : 0), 0); m = challengeData.filter(g => g.completions.some(c => c.participant === activeParticipant)).length; } const p = (m / 52) * 100; document.getElementById('totalSavedCounter').innerText = formatPYG(t); document.getElementById('completedCount').innerText = m; document.getElementById('progressPercentage').innerText = Math.round(p) + '%'; document.getElementById('globalProgressCircle').style.strokeDashoffset = 150.8 - (p / 100 * 150.8); }
-        function renderGoals() { const container = document.getElementById('goalsList'); const data = currentFilter === 'ALL' ? challengeData : challengeData.filter(g => g.phase === currentFilter); const colors = { 'EMPEZAR': 'bg-emerald-500', 'SOSTENER': 'bg-sky-500', 'CONSTANCIA': 'bg-indigo-500', 'RESULTADOS': 'bg-rose-500' }; container.innerHTML = data.map((g) => { const done = activeParticipant ? g.completions.some(c => c.participant === activeParticipant) : false; return `<div class="glass-card rounded-xl p-2 flex items-center gap-4 border-l-4 ${done ? 'border-l-primary' : 'border-l-slate-200'}"><div class="w-8 h-8 rounded-lg ${colors[g.phase]} flex items-center justify-center text-white text-[10px] font-bold shrink-0">${g.week}</div><div class="flex-grow"><div class="text-sm font-bold text-slate-800">${formatPYG(g.amount)}</div><div class="text-[9px] uppercase text-slate-400 font-bold">${g.phase}</div></div><div class="flex -space-x-2 shrink-0 px-2">${g.completions.map(c => `<div class="h-5 w-5 rounded-full ring-2 ring-white bg-primary text-[8px] flex items-center justify-center text-white font-bold">${c.participant[0]}</div>`).join('')}</div><button onclick="toggle(${g.week - 1})" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${done ? 'bg-primary text-white' : 'bg-slate-100 text-slate-500'}">${done ? 'LISTO' : 'MARCAR'}</button></div>`; }).join(''); }
+
+        function generateWeeks() {
+            challengeData = [];
+            for (let i = 1; i <= 52; i++) {
+                let phase = i <= 13 ? "EMPEZAR" : i <= 26 ? "SOSTENER" : i <= 39 ? "CONSTANCIA" : "RESULTADOS";
+                challengeData.push({ week: i, amount: i * 10000, phase: phase, completions: [] });
+            }
+        }
+
+        function save() { localStorage.setItem('ahorro_v14_final', JSON.stringify({ challengeData, participants, activeParticipant, statsView })); }
+
+        function load() {
+            const saved = localStorage.getItem('ahorro_v14_final');
+            if (saved) {
+                const p = JSON.parse(saved);
+                challengeData = p.challengeData; participants = p.participants; activeParticipant = p.activeParticipant; statsView = p.statsView || "COLECTIVO";
+            } else { generateWeeks(); }
+        }
+
+        function renderParticipants() {
+            const list = document.getElementById('participantList');
+            if (participants.length === 0) { list.innerHTML = `<p class="text-[11px] text-slate-400 italic px-2">Agrega un nombre</p>`; return; }
+            list.innerHTML = participants.map(p => `<div class="flex items-center bg-white/50 rounded-lg p-1 border border-transparent hover:border-slate-200"><button onclick="setActiveParticipant('${p}')" class="flex-grow text-left px-3 py-1.5 text-sm font-semibold rounded-md transition-all ${p === activeParticipant ? 'badge-active' : 'text-slate-500'}">${p}</button><button onclick="deleteParticipant('${p}')" class="px-2 text-slate-300 hover:text-rose-500">X</button></div>`).join('');
+        }
+
+        function addParticipant() {
+            const name = document.getElementById('newParticipantInput').value.trim().toUpperCase();
+            if (name && !participants.includes(name)) {
+                participants.push(name); if (!activeParticipant) activeParticipant = name;
+                document.getElementById('newParticipantInput').value = ''; save(); renderParticipants(); renderGoals(); updateStats();
+            }
+        }
+
+        function deleteParticipant(name) {
+            if (confirm(`¿Eliminar a ${name}?`)) {
+                participants = participants.filter(p => p !== name);
+                challengeData.forEach(g => g.completions = g.completions.filter(c => c.participant !== name));
+                if (activeParticipant === name) activeParticipant = participants[0] || "";
+                save(); renderParticipants(); renderGoals(); updateStats();
+            }
+        }
+
+        function setActiveParticipant(name) { activeParticipant = name; renderParticipants(); renderGoals(); updateStats(); }
+
+        function setStatsView(view) {
+            statsView = view; updateStats();
+            document.getElementById('btnViewCol').className = view === 'COLECTIVO' ? 'px-3 py-1 text-xs font-bold rounded-full border border-primary text-primary' : 'px-3 py-1 text-xs font-bold rounded-full border border-slate-200 text-slate-400';
+            document.getElementById('btnViewInd').className = view === 'INDIVIDUAL' ? 'px-3 py-1 text-xs font-bold rounded-full border border-primary text-primary' : 'px-3 py-1 text-xs font-bold rounded-full border border-slate-200 text-slate-400';
+        }
+
+        function toggle(idx) {
+            if (!activeParticipant) return alert("Agrega un nombre primero");
+            const goal = challengeData[idx]; const cIdx = goal.completions.findIndex(c => c.participant === activeParticipant);
+            if (cIdx > -1) goal.completions.splice(cIdx, 1);
+            else goal.completions.push({ participant: activeParticipant, date: new Date().toLocaleDateString('es-PY') });
+            save(); renderGoals(); updateStats();
+        }
+
+        function updateStats() {
+            let total = 0, met = 0;
+            if (statsView === 'COLECTIVO') {
+                total = challengeData.reduce((s, g) => s + (g.completions.length * g.amount), 0);
+                met = challengeData.filter(g => g.completions.length > 0).length;
+            } else {
+                total = challengeData.reduce((s, g) => s + (g.completions.some(c => c.participant === activeParticipant) ? g.amount : 0), 0);
+                met = challengeData.filter(g => g.completions.some(c => c.participant === activeParticipant)).length;
+            }
+            const percent = (met / 52) * 100;
+            document.getElementById('totalSavedCounter').innerText = formatPYG(total);
+            document.getElementById('completedCount').innerText = met;
+            document.getElementById('progressPercentage').innerText = Math.round(percent) + '%';
+            document.getElementById('globalProgressCircle').style.strokeDashoffset = 150.8 - (percent / 100 * 150.8);
+        }
+
+        function renderGoals() {
+            const container = document.getElementById('goalsList');
+            const data = currentFilter === 'ALL' ? challengeData : challengeData.filter(g => g.phase === currentFilter);
+            const colors = { 'EMPEZAR': 'bg-emerald-500', 'SOSTENER': 'bg-sky-500', 'CONSTANCIA': 'bg-indigo-500', 'RESULTADOS': 'bg-rose-500' };
+            container.innerHTML = data.map((g) => {
+                const done = activeParticipant ? g.completions.some(c => c.participant === activeParticipant) : false;
+                return `<div class="glass-card rounded-xl p-2 flex items-center gap-4 border-l-4 ${done ? 'border-l-primary' : 'border-l-slate-200'}"><div class="w-8 h-8 rounded-lg ${colors[g.phase]} flex items-center justify-center text-white text-[10px] font-bold shrink-0">${g.week}</div><div class="flex-grow"><div class="text-sm font-bold text-slate-800">${formatPYG(g.amount)}</div><div class="text-[9px] uppercase text-slate-400 font-bold">${g.phase}</div></div><div class="flex -space-x-2 shrink-0 px-2">${g.completions.map(c => `<div title="${c.participant}" class="h-5 w-5 rounded-full ring-2 ring-white bg-primary text-[8px] flex items-center justify-center text-white font-bold">${c.participant[0]}</div>`).join('')}</div><button onclick="toggle(${g.week - 1})" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${done ? 'bg-primary text-white' : 'bg-slate-100 text-slate-500'}">${done ? 'LISTO' : 'MARCAR'}</button></div>`;
+            }).join('');
+        }
+
         function filterPhase(p) { currentFilter = p; renderGoals(); }
         function confirmReset() { if (confirm("¿Borrar todo?")) { localStorage.clear(); location.reload(); } }
+
+        // REGISTRO DEL SERVICE WORKER (PARA INSTALAR APP)
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('sw.js');
+        }
+
         load(); renderParticipants(); renderGoals(); updateStats(); setStatsView(statsView);
     </script>
 </body>
