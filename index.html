@@ -5,15 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ahorro Challenge</title>
     
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="manifest.json?v=2">
     
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#10b981">
+    <meta name="apple-mobile-web-app-title" content="Ahorro">
+    <link rel="apple-touch-icon" sizes="512x512" href="https://i.ibb.co/m5p3Srk/image.png">
     
-    <link rel="apple-touch-icon" href="https://i.ibb.co/m5p3Srk/image.png">
-    <link rel="icon" type="image/png" href="https://i.ibb.co/m5p3Srk/image.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#10b981">
+    <link rel="icon" type="image/png" sizes="512x512" href="https://i.ibb.co/m5p3Srk/image.png">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -32,7 +33,7 @@
         body { background: radial-gradient(circle at top right, #f0fdf4, #f8fafc 50%), radial-gradient(circle at bottom left, #eff6ff, #f8fafc 50%); min-height: 100vh; }
         .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.5); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .badge-active { background: #10b981; color: white; }
+        .badge-active { background: #10b981 !important; color: white !important; }
     </style>
 </head>
 <body class="font-body text-slate-800">
@@ -41,8 +42,8 @@
             <div>
                 <h1 class="text-3xl font-display font-bold text-slate-900">Ahorro <span class="text-primary">Challenge</span></h1>
                 <div class="flex gap-2 mt-2">
-                    <button onclick="setStatsView('COLECTIVO')" id="btnViewCol" class="px-3 py-1 text-xs font-bold rounded-full transition-all border border-primary text-primary">VISTA COLECTIVA</button>
-                    <button onclick="setStatsView('INDIVIDUAL')" id="btnViewInd" class="px-3 py-1 text-xs font-bold rounded-full transition-all border border-slate-200 text-slate-400">VISTA INDIVIDUAL</button>
+                    <button onclick="setStatsView('COLECTIVO')" id="btnViewCol" class="px-3 py-1 text-xs font-bold rounded-full border border-primary text-primary">VISTA COLECTIVA</button>
+                    <button onclick="setStatsView('INDIVIDUAL')" id="btnViewInd" class="px-3 py-1 text-xs font-bold rounded-full border border-slate-200 text-slate-400">VISTA INDIVIDUAL</button>
                 </div>
             </div>
             <div class="glass-card rounded-2xl p-4 flex items-center gap-6 min-w-[280px] border-l-4 border-l-primary shadow-sm">
@@ -67,22 +68,20 @@
                     <h2 class="text-sm font-bold mb-3 uppercase tracking-wider text-slate-500">Participantes</h2>
                     <div class="flex gap-2 mb-4">
                         <input type="text" id="newParticipantInput" placeholder="Nombre..." class="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-sm outline-none focus:ring-1 focus:ring-primary">
-                        <button onclick="addParticipant()" class="bg-primary text-white p-2 rounded-lg hover:bg-emerald-600 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" /></svg>
-                        </button>
+                        <button onclick="addParticipant()" class="bg-primary text-white p-2 rounded-lg hover:bg-emerald-600 transition-colors">+</button>
                     </div>
                     <div id="participantList" class="space-y-1"></div>
                 </div>
-                <button onclick="confirmReset()" class="w-full py-2 text-xs font-bold text-rose-400 hover:text-rose-600 transition-colors flex justify-center items-center gap-1">RESETEAR TODO</button>
+                <button onclick="confirmReset()" class="w-full py-2 text-xs font-bold text-rose-400 hover:text-rose-600 flex justify-center items-center gap-1">RESETEAR TODO</button>
             </aside>
 
             <main class="lg:col-span-3">
-                <div class="flex overflow-x-auto pb-3 gap-2 no-scrollbar mb-4">
-                    <button onclick="filterPhase('ALL')" class="phase-btn flex-none px-4 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-bold hover:border-primary transition-all">Todas</button>
-                    <button onclick="filterPhase('EMPEZAR')" class="phase-btn flex-none px-4 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-bold hover:border-primary transition-all">Fase 1</button>
-                    <button onclick="filterPhase('SOSTENER')" class="phase-btn flex-none px-4 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-bold hover:border-primary transition-all">Fase 2</button>
-                    <button onclick="filterPhase('CONSTANCIA')" class="phase-btn flex-none px-4 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-bold hover:border-primary transition-all">Fase 3</button>
-                    <button onclick="filterPhase('RESULTADOS')" class="phase-btn flex-none px-4 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-bold hover:border-primary transition-all">Fase 4</button>
+                <div class="flex overflow-x-auto pb-3 gap-2 no-scrollbar mb-4" id="filterBar">
+                    <button onclick="filterPhase('ALL')" class="phase-btn flex-none px-4 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-bold">Todas</button>
+                    <button onclick="filterPhase('EMPEZAR')" class="phase-btn flex-none px-4 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-bold">Fase 1</button>
+                    <button onclick="filterPhase('SOSTENER')" class="phase-btn flex-none px-4 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-bold">Fase 2</button>
+                    <button onclick="filterPhase('CONSTANCIA')" class="phase-btn flex-none px-4 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-bold">Fase 3</button>
+                    <button onclick="filterPhase('RESULTADOS')" class="phase-btn flex-none px-4 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-bold">Fase 4</button>
                 </div>
                 <div id="goalsList" class="space-y-2"></div>
             </main>
@@ -90,12 +89,7 @@
     </div>
 
     <script>
-        let challengeData = [];
-        let participants = [];
-        let activeParticipant = "";
-        let currentFilter = "ALL";
-        let statsView = "COLECTIVO";
-
+        let challengeData = []; let participants = []; let activeParticipant = ""; let currentFilter = "ALL"; let statsView = "COLECTIVO";
         const formatPYG = (n) => new Intl.NumberFormat('es-PY').format(n) + ' Gs.';
 
         function generateWeeks() {
@@ -106,26 +100,16 @@
             }
         }
 
-        function save() { localStorage.setItem('ahorro_v10_final', JSON.stringify({ challengeData, participants, activeParticipant, statsView })); }
+        function save() { localStorage.setItem('ahorro_pwa_v11', JSON.stringify({ challengeData, participants, activeParticipant, statsView })); }
 
         function load() {
-            const saved = localStorage.getItem('ahorro_v10_final');
+            const saved = localStorage.getItem('ahorro_pwa_v11');
             if (saved) {
                 const p = JSON.parse(saved);
-                challengeData = p.challengeData;
-                participants = p.participants;
-                activeParticipant = p.activeParticipant;
-                statsView = p.statsView || "COLECTIVO";
+                challengeData = p.challengeData; participants = p.participants; activeParticipant = p.activeParticipant; statsView = p.statsView || "COLECTIVO";
             } else {
-                participants = []; activeParticipant = ""; generateWeeks();
+                generateWeeks();
             }
-        }
-
-        function init() {
-            load();
-            renderParticipants();
-            renderGoals();
-            updateStats();
         }
 
         function renderParticipants() {
@@ -135,12 +119,10 @@
         }
 
         function addParticipant() {
-            const input = document.getElementById('newParticipantInput');
-            const name = input.value.trim().toUpperCase();
+            const name = document.getElementById('newParticipantInput').value.trim().toUpperCase();
             if (name && !participants.includes(name)) {
-                participants.push(name);
-                if (!activeParticipant) activeParticipant = name;
-                input.value = ''; save(); renderParticipants(); renderGoals(); updateStats();
+                participants.push(name); if (!activeParticipant) activeParticipant = name;
+                document.getElementById('newParticipantInput').value = ''; save(); renderParticipants(); renderGoals(); updateStats();
             }
         }
 
@@ -153,7 +135,7 @@
             }
         }
 
-        function setActiveParticipant(name) { activeParticipant = name; renderParticipants(); renderGoals(); updateStats(); }
+        function setActiveParticipant(name) { activeParticipant = name; save(); renderParticipants(); renderGoals(); updateStats(); }
 
         function setStatsView(view) {
             statsView = view; updateStats();
@@ -163,8 +145,7 @@
 
         function toggle(idx) {
             if (!activeParticipant) return alert("Agrega un nombre primero");
-            const goal = challengeData[idx];
-            const cIdx = goal.completions.findIndex(c => c.participant === activeParticipant);
+            const goal = challengeData[idx]; const cIdx = goal.completions.findIndex(c => c.participant === activeParticipant);
             if (cIdx > -1) goal.completions.splice(cIdx, 1);
             else goal.completions.push({ participant: activeParticipant, date: new Date().toLocaleDateString('es-PY') });
             save(); renderGoals(); updateStats();
@@ -205,9 +186,10 @@
             }).join('');
         }
 
-        function filterPhase(phase) { currentFilter = phase; renderGoals(); }
+        function filterPhase(p) { currentFilter = p; renderGoals(); }
         function confirmReset() { if (confirm("¿Borrar todo?")) { localStorage.clear(); location.reload(); } }
-        window.addEventListener('DOMContentLoaded', init);
+
+        load(); renderParticipants(); renderGoals(); updateStats(); setStatsView(statsView);
     </script>
 </body>
 </html>
